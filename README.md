@@ -42,3 +42,13 @@ python3 -m http.server 8000
 
 Si quieres que cambie el diseño, añada nuevas distribuciones o mejore la accesibilidad, abre un issue aquí (o pásame los cambios que quieras) y los aplicaré.
 
+## Página publicada
+
+La versión pública del proyecto está desplegada en GitHub Pages:
+
+https://Vasallo94.github.io/Distribuciones/
+
+Visita esa URL para ver la aplicación en producción. Si no ves cambios recientes, fuerza la recarga en tu navegador (Cmd+Shift+R en macOS) o limpia la caché.
+
+Si prefieres, también puedes acceder directamente al archivo `index.html` en el repositorio y abrirlo localmente.
+
