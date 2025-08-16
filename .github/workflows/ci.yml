@@ -25,4 +25,4 @@ jobs:
 
       - name: Run html-validate on index.html
         run: |
-          html-validate index.html --format=stylish
+          html-validate index.html
