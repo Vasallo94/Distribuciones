@@ -26,286 +26,187 @@
     </script>
     <!-- MathJax para fórmulas LaTeX (usar defer para garantizar orden) -->
     <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f4f7f9;
-            --main-text-color: #333;
-            --primary-color: #007bff;
-            --primary-hover-color: #0056b3;
+            --bg-color: #f6f7fb;
+            --main-text-color: #0f1724;
+            --muted-text: #6b7280;
+            --primary-color: #1f6feb; /* elegante azul */
+            --primary-600: #165fc1;
             --panel-bg-color: #ffffff;
-            --border-color: #dee2e6;
-            --slider-track-color: #ced4da;
+            --surface-2: #f1f5f9;
+            --border-color: rgba(15,23,36,0.06);
+            --slider-track-color: #e6edf9;
             --slider-thumb-color: var(--primary-color);
-            --active-button-bg: var(--primary-color);
-            --active-button-text: #fff;
-            --button-bg: #e9ecef;
-            --button-text: #495057;
+            --button-bg: transparent;
+            --button-text: var(--main-text-color);
+            --success: #16a34a;
+            --danger: #ef4444;
+            --glass: rgba(255,255,255,0.6);
         }
         body.dark {
-            --bg-color: #0d1117;
-            --main-text-color: #f0f6fc;
+            --bg-color: #0b1220;
+            --main-text-color: #e6eef8;
+            --muted-text: #94a3b8;
             --primary-color: #58a6ff;
-            --primary-hover-color: #1f6feb;
-            --panel-bg-color: #161b22;
-            --border-color: #30363d;
-            --button-bg: #21262d;
-            --button-text: #f0f6fc;
-            --slider-track-color: #30363d;
+            --primary-600: #2f83ff;
+            --panel-bg-color: #0f1724;
+            --surface-2: #0b1220;
+            --border-color: rgba(255,255,255,0.04);
+            --button-bg: rgba(255,255,255,0.02);
+            --button-text: #e6eef8;
+            --slider-track-color: #172033;
             --slider-thumb-color: var(--primary-color);
         }
-
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 28px 20px;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
             background-color: var(--bg-color);
             color: var(--main-text-color);
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.25s ease, color 0.25s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1180px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 22px;
         }
 
         header h1 {
             text-align: center;
             color: var(--primary-color);
-            margin-bottom: 0;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            font-size: 20px;
+            padding: 8px 0 4px 0;
         }
 
         .top-bar {
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
+            gap: 8px;
+            align-items: center;
         }
 
         .toggle-btn {
-            padding: 8px 14px;
-            font-size: 14px;
+            padding: 6px 12px;
+            font-size: 13px;
             cursor: pointer;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            background-color: var(--button-bg);
+            border-radius: 999px;
+            background: var(--button-bg);
             color: var(--button-text);
-            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            box-shadow: none;
+            transition: all 0.18s ease;
         }
-        .toggle-btn:hover {
-            background-color: var(--primary-color);
-            color: var(--active-button-text);
-            border-color: var(--primary-hover-color);
-        }
+        .toggle-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(31,111,235,0.06); }
 
         #dist-selector {
             display: flex;
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            margin: 2px 0 6px 0;
         }
 
         #dist-selector button {
-            padding: 8px 16px;
-            font-size: 14px;
+            padding: 8px 14px;
+            font-size: 13px;
             cursor: pointer;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            background-color: var(--button-bg);
-            color: var(--button-text);
-            transition: all 0.3s ease;
+            border: none;
+            border-radius: 999px;
+            background-color: transparent;
+            color: var(--muted-text);
+            transition: all 0.18s ease;
             white-space: nowrap;
-            min-width: 120px;
+            min-width: 110px;
+            box-shadow: inset 0 0 0 1px transparent;
         }
 
         #dist-selector button.active {
-            background-color: var(--active-button-bg);
-            color: var(--active-button-text);
-            border-color: var(--primary-hover-color);
+            background: linear-gradient(180deg, rgba(31,111,235,0.12), rgba(31,111,235,0.06));
+            color: var(--primary-color);
+            font-weight: 600;
+            box-shadow: 0 6px 18px rgba(31,111,235,0.06);
         }
 
-        #dist-selector button:hover:not(.active) { 
-            background-color: var(--primary-color); 
-            color: var(--active-button-text);
-            border-color: var(--primary-hover-color);
-        }
+        #dist-selector button:hover:not(.active) { color: var(--primary-600); transform: translateY(-1px); }
 
         .main-content {
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            align-items: flex-start;
+            grid-template-columns: 1.6fr 0.9fr;
+            gap: 22px;
+            align-items: start;
         }
 
         .chart-container {
             background-color: var(--panel-bg-color);
-            padding: 20px;
-            border-radius: 8px;
+            padding: 18px;
+            border-radius: 12px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 10px 30px rgba(12,18,30,0.04);
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
         }
 
-        .controls-info-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+        .chart-container:hover { transform: translateY(-3px); }
+
+        .controls-info-panel { display:flex; flex-direction:column; gap:18px; }
 
         .panel {
             background-color: var(--panel-bg-color);
-            padding: 20px;
-            border-radius: 8px;
+            padding: 18px;
+            border-radius: 12px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-        
-        .panel h2 {
-            margin-top: 0;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
+            box-shadow: 0 8px 26px rgba(7,12,20,0.03);
         }
 
-        .control-group {
-            margin-bottom: 15px;
-        }
+        .panel h2 { margin-top:0; color:var(--primary-color); border-bottom: none; padding-bottom: 0; font-size:16px; }
 
-        .control-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: var(--main-text-color);
-        }
-        
-        .control-group span {
-            font-family: 'Consolas', 'Monaco', monospace;
-            background: var(--border-color);
-            color: var(--main-text-color);
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
+        .control-group { margin-bottom: 14px; }
 
-        input[type="range"] {
-            width: 100%;
-            cursor: pointer;
-            -webkit-appearance: none;
-            appearance: none;
-            background: transparent;
-        }
-        input[type="range"]::-webkit-slider-runnable-track {
-            height: 8px;
-            background: var(--slider-track-color);
-            border-radius: 4px;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            margin-top: -6px; /* Centers thumb on track */
-            width: 20px;
-            height: 20px;
-            background: var(--slider-thumb-color);
-            border-radius: 50%;
-            border: 2px solid white;
-            box-shadow: 0 0 2px rgba(0,0,0,0.5);
-        }
-        
-        .example-button {
-            width: 100%;
-            padding: 12px;
-            font-size: 15px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
-        .example-button:hover { 
-            background-color: #218838; 
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .example-button.example-active {
-            background-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(255,255,255,0.6) inset;
-        }
-        .example-button.example-active:hover {
-            background-color: var(--primary-hover-color);
-        }
+        .control-group label { display:flex; justify-content:space-between; gap:8px; margin-bottom:8px; color:var(--main-text-color); font-weight:600; }
 
-        .formula {
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 1.2em;
-            text-align: center;
-            margin: 15px 0;
-            padding: 15px;
-            background-color: var(--border-color);
-            color: var(--main-text-color);
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            overflow-x: auto;
-            transition: all 0.3s ease;
-        }
+        .control-group span { font-family: 'Consolas', 'Monaco', monospace; background: transparent; color: var(--muted-text); padding: 2px 6px; border-radius:6px; font-weight:600; }
 
-        #info-panel p {
-            line-height: 1.6;
-            color: var(--main-text-color);
-        }
+        input[type="range"] { width:100%; height: 28px; background: transparent; }
+        input[type="range"]::-webkit-slider-runnable-track { height: 8px; background: var(--slider-track-color); border-radius: 999px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:16px; height:16px; margin-top:-4px; border-radius:50%; background:var(--slider-thumb-color); border:3px solid #fff; box-shadow: 0 6px 18px rgba(31,111,235,0.12); }
 
-        /* Mejorar contraste para MathJax en modo oscuro */
-        body.dark .MathJax {
-            color: var(--main-text-color) !important;
-        }
-        
-        body.dark .mjx-math {
-            color: var(--main-text-color) !important;
-        }
+        .example-button { width:100%; padding:10px 12px; font-size:14px; color:#fff; border-radius:10px; border:none; cursor:pointer; margin-top:10px; box-shadow: 0 6px 18px rgba(16,185,129,0.08); }
+        .example-button:hover { transform: translateY(-2px); }
+        .example-button.example-active { box-shadow: 0 8px 24px rgba(31,111,235,0.08); }
 
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0,0,0,0);
-            white-space: nowrap;
-            border: 0;
-        }
+        .example-button:nth-child(1) { background: linear-gradient(180deg,#3b82f6,#2563eb); }
+        .example-button:nth-child(2) { background: linear-gradient(180deg,#10b981,#059669); }
+        .example-button:nth-child(3) { background: linear-gradient(180deg,#f59e0b,#d97706); }
+        .example-button:nth-child(4) { background: linear-gradient(180deg,#8b5cf6,#6d28d9); }
 
-        .foot-note {
-            font-size: 0.8rem;
-            opacity: 0.7;
-            margin-top: 10px;
-        }
+        .formula { font-family: 'Georgia', serif; font-size:1.02rem; text-align:center; margin:14px 0; padding:14px; background:var(--surface-2); color:var(--main-text-color); border-radius:10px; overflow-x:auto; }
 
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-        }
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            #dist-selector button {
-                width: 100%;
-            }
-        }
+        #info-panel p { line-height:1.65; color:var(--muted-text); }
+
+        body.dark .MathJax, body.dark .mjx-math { color: var(--main-text-color) !important; }
+
+        .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+        .foot-note { font-size:0.85rem; color:var(--muted-text); margin-top:10px; }
+
+        /* Moments compact */
+        #moments-controls { font-weight:600; color:var(--main-text-color); }
+
+        /* Responsive tweaks */
+        @media (max-width: 992px) { .main-content { grid-template-columns: 1fr; } .chart-container { order:0 } }
+        @media (max-width: 640px) { .container { padding: 14px; } header h1 { font-size:18px; } .example-button { font-size:13px; } }
     </style>
 </head>
 <body>
@@ -316,6 +217,7 @@
         </header>
 
         <div class="top-bar">
+            <button id="math-help-toggle" class="toggle-btn" aria-pressed="false" aria-label="Mostrar/ocultar ayuda matemática">📚 Conceptos Matemáticos</button>
             <button id="theme-toggle" class="toggle-btn" aria-pressed="false" aria-label="Cambiar tema claro/oscuro">🌙 Modo Oscuro</button>
         </div>
 
@@ -329,6 +231,83 @@
             <button id="btn-beta">Distribución Beta</button>
             <button id="btn-geometric">Distribución Geométrica</button>
         </div>
+
+        <!-- Panel de Ayuda Matemática (inicialmente oculto) -->
+        <div id="math-help-panel" class="panel" style="display: none;">
+            <h2>📚 Conceptos Matemáticos Explicados</h2>
+            <div style="display: grid; gap: 1rem;">
+                
+                <details>
+                    <summary style="font-weight: bold; cursor: pointer; color: var(--primary-color);">🧮 Media (Valor Esperado) - E[X]</summary>
+                    <div style="padding: 0.5rem 0;">
+                        <p><strong>¿Qué es?</strong> El promedio de todos los valores posibles, ponderado por su probabilidad. Si repites el experimento muchas veces, la media es el valor promedio que obtienes.</p>
+                        <p><strong>Ejemplo:</strong> Si lanzas un dado justo, la media es (1+2+3+4+5+6)/6 = 3.5. No puedes sacar 3.5 en un lanzamiento, pero es el promedio a largo plazo.</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="font-weight: bold; cursor: pointer; color: var(--primary-color);">📊 Varianza - Var(X)</summary>
+                    <div style="padding: 0.5rem 0;">
+                        <p><strong>¿Qué es?</strong> Mide qué tan "dispersos" están los valores alrededor de la media. Mayor varianza = mayor dispersión = resultados más impredecibles.</p>
+                        <p><strong>Ejemplo:</strong> Dos exámenes con media 70: uno con varianza 4 (notas entre 68-72), otro con varianza 100 (notas entre 50-90). Misma media, muy diferente dispersión.</p>
+                        <p><strong>Desviación estándar:</strong> $\\sigma = \\sqrt{\\text{Varianza}}$ - más fácil de interpretar porque está en las mismas unidades que los datos.</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="font-weight: bold; cursor: pointer; color: var(--primary-color);">🔢 Factorial - n!</summary>
+                    <div style="padding: 0.5rem 0;">
+                        <p><strong>¿Qué es?</strong> $n! = n \\times (n-1) \\times (n-2) \\times \\ldots \\times 2 \\times 1$</p>
+                        <p><strong>Ejemplos:</strong> $3! = 3 \\times 2 \\times 1 = 6$, $5! = 5 \\times 4 \\times 3 \\times 2 \\times 1 = 120$</p>
+                        <p><strong>¿Para qué sirve?</strong> Cuenta el número de formas de ordenar n objetos. Por ejemplo, 5! = 120 formas de ordenar 5 personas en una fila.</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="font-weight: bold; cursor: pointer; color: var(--primary-color);">🎯 Coeficiente Binomial - "n eligir k"</summary>
+                    <div style="padding: 0.5rem 0;">
+                        <p><strong>Fórmula:</strong> $\\binom{n}{k} = \\frac{n!}{k!(n-k)!}$</p>
+                        <p><strong>¿Qué cuenta?</strong> El número de formas de elegir k objetos de un grupo de n objetos, cuando el orden no importa.</p>
+                        <p><strong>Ejemplo:</strong> $\\binom{5}{2} = \\frac{5!}{2!3!} = \\frac{120}{2 \\times 6} = 10$ formas de elegir 2 personas de un grupo de 5.</p>
+                        <p><strong>En la vida real:</strong> Combinaciones de lotería, equipos deportivos, comités.</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="font-weight: bold; cursor: pointer; color: var(--primary-color);">⚡ Número e (≈ 2.718)</summary>
+                    <div style="padding: 0.5rem 0;">
+                        <p><strong>¿Qué es?</strong> Una constante matemática especial, como π pero para crecimiento exponencial y procesos de decaimiento.</p>
+                        <p><strong>¿Dónde aparece?</strong> En interés compuesto continuo, crecimiento poblacional, decaimiento radioactivo, y muchas distribuciones de probabilidad.</p>
+                        <p><strong>Función exponencial:</strong> $e^x$ crece muy rápido, $e^{-x}$ decrece muy rápido hacia 0.</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="font-weight: bold; cursor: pointer; color: var(--primary-color);">🌟 Función Gamma - Γ(n)</summary>
+                    <div style="padding: 0.5rem 0;">
+                        <p><strong>¿Qué es?</strong> Una generalización del factorial para números no enteros.</p>
+                        <p><strong>Relación con factorial:</strong> $\\Gamma(n) = (n-1)!$ para números enteros positivos.</p>
+                        <p><strong>Ejemplos:</strong> $\\Gamma(4) = 3! = 6$, $\\Gamma(5) = 4! = 24$</p>
+                        <p><strong>¿Para qué sirve?</strong> Permite definir distribuciones continuas como la Gamma y Beta de forma matemáticamente elegante.</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="font-weight: bold; cursor: pointer; color: var(--primary-color);">📈 ¿Qué es una Distribución de Probabilidad?</summary>
+                    <div style="padding: 0.5rem 0;">
+                        <p><strong>Idea básica:</strong> Una regla que te dice qué tan probable es cada resultado posible en un experimento aleatorio.</p>
+                        <p><strong>Discreta vs Continua:</strong></p>
+                        <ul>
+                            <li><strong>Discreta:</strong> Resultados contables (1, 2, 3, ...). Ejemplo: número de caras al lanzar monedas.</li>
+                            <li><strong>Continua:</strong> Resultados en rangos (cualquier número real). Ejemplo: altura de personas.</li>
+                        </ul>
+                        <p><strong>Propiedad clave:</strong> Todas las probabilidades suman 1 (100% de certeza de que algo ocurra).</p>
+                    </div>
+                </details>
+
+            </div>
+        </div>
+
         <main class="main-content">
             <div class="chart-container">
                 <canvas id="myChart" aria-label="Gráfico de la distribución" role="img"></canvas>
@@ -361,26 +340,26 @@
                         label: 'Distribución Normal',
                         chartType: 'line',
                         params: [
-                            { id: 'mu', label: 'Media (μ)', min: 30, max: 220, step: 1, value: 170 },
-                            { id: 'sigma', label: 'Desviación Estándar (σ)', min: 0.1, max: 50, step: 0.1, value: 7.5 }
+                            { id: 'mu', label: 'Media ($\\mu$)', min: 30, max: 220, step: 1, value: 170 },
+                            { id: 'sigma', label: 'Desviación Estándar ($\\sigma$)', min: 0.1, max: 50, step: 0.1, value: 7.5 }
                         ],
                         examples: [
                             { name: 'Alturas adultos', params: { mu: 170, sigma: 7.5 }, description: 'Modela alturas (en cm). Aproximadamente 68% de las personas están entre 162.5 y 177.5 cm.' },
-                            { name: 'CI (IQ) estándar', params: { mu: 100, sigma: 15 }, description: 'Inteligencia medida con media 100 y σ=15. 95% cae entre 70 y 130.' },
-                            { name: 'Temperatura corporal', params: { mu: 37, sigma: 0.5 }, description: 'Temperatura central humana (°C). 95% está aprox. entre 36 y 38.' }
+                            { name: 'CI (IQ) estándar', params: { mu: 100, sigma: 15 }, description: 'Inteligencia medida con media 100 y $\\sigma=15$. 95% cae entre 70 y 130.' },
+                            { name: 'Temperatura corporal', params: { mu: 37, sigma: 0.5 }, description: 'Temperatura central humana ($^\\circ$C). 95% está aprox. entre 36 y 38.' }
                         ],
                         info: {
                             title: 'Distribución Normal',
-                            description: 'Curva de campana simétrica usada para fenómenos agregados (altura, errores de medida, puntuaciones). La suma de muchos efectos pequeños tiende a esta forma (Teorema Central del Límite).',
+                            description: 'La famosa "curva de campana" simétrica. Es fundamental en estadística porque muchos fenómenos naturales siguen este patrón: alturas, pesos, errores de medición, puntuaciones de tests. Aparece cuando sumamos muchos efectos pequeños e independientes (Teorema Central del Límite).',
                             formula: '$$f(x)=\\frac{1}{\\sigma \\sqrt{2\\pi}} e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}$$',
                             meanVarFormula: '$$\\mathbb{E}[X]=\\mu\\text{,} \\quad \\operatorname{Var}(X)=\\sigma^2$$',
-                            concepts: '<p><strong>Esperanza y Varianza:</strong> La esperanza $\\mathbb{E}[X]$ (media) indica el centro de la distribución; la varianza $\\operatorname{Var}(X)=\\mathbb{E}[(X-\\mathbb{E}[X])^2]$ mide la dispersión alrededor de la media.</p><p><strong>Z-score:</strong> $z=\\dfrac{x-\\mu}{\\sigma}$ permite comparar desviaciones en unidades de desviación estándar.</p><p><strong>Propiedades:</strong> La integral de la densidad es 1; muchas distribuciones se aproximan a la normal cuando se suman efectos independientes (TCL).</p>',
+                            concepts: '<p><strong>¿Por qué es tan importante?</strong> La distribución normal aparece constantemente en la naturaleza y en procesos estadísticos. Cuando medimos cualquier característica en una población grande (alturas, pesos, tiempos de reacción), frecuentemente obtenemos esta forma de campana.</p><p><strong>Interpretación práctica:</strong> $\\mu$ nos dice "dónde está el centro" y $\\sigma$ nos dice "qué tan dispersos están los datos". Un $\\sigma$ pequeño significa que la mayoría de valores están muy cerca de $\\mu$.</p><p><strong>Z-score:</strong> $z=\\dfrac{x-\\mu}{\\sigma}$ nos permite comparar valores de diferentes distribuciones normales. Un z-score de 2 significa "2 desviaciones estándar por encima de la media".</p>',
                             terms: [
-                                { symbol: '$\\mu$', description: 'Media o esperanza; valor central alrededor del cual se concentra la masa.' },
-                                { symbol: '$\\sigma$', description: 'Desviación estándar; medida de dispersión (mayor σ ⇒ distribución más ancha).' },
-                                { symbol: '$x$', description: 'Valor de la variable aleatoria.' }
+                                { symbol: '$\\mu$', description: 'Media poblacional: el "centro de gravedad" de la distribución. Es el valor más probable.' },
+                                { symbol: '$\\sigma$', description: 'Desviación estándar: mide qué tan "extendidos" están los datos. Mayor $\\sigma$ = mayor variabilidad.' },
+                                { symbol: '$x$', description: 'Un valor específico de la variable que estamos midiendo (ej: altura de una persona).' }
                             ],
-                            paramExplanation: 'μ desplaza la campana; σ controla la dispersión. Regla 68-95-99.7: en μ±σ ≈68%, μ±2σ ≈95%, μ±3σ ≈99.7%.'
+                            paramExplanation: 'Regla práctica 68-95-99.7: Aproximadamente 68% de los datos caen dentro de 1 desviación estándar de la media ($\\mu \\pm \\sigma$), 95% dentro de 2 ($\\mu \\pm 2\\sigma$), y 99.7% dentro de 3 ($\\mu \\pm 3\\sigma$). Esta regla es muy útil para entender qué valores son "normales" o "extremos".'
                         },
                         moments: ({ mu, sigma }) => ({ mean: mu, variance: sigma * sigma }),
                         dataFunc: ({ mu, sigma }) => {
@@ -403,22 +382,23 @@
                         ],
                         examples: [
                             { name: 'Moneda justa', params: { n: 20, p: 0.5 }, description: '20 lanzamientos de moneda equilibrada. Media esperada de caras: 10.' },
-                            { name: 'Control de calidad', params: { n: 100, p: 0.05 }, description: '100 ítems con 5% defectos esperados. Media de defectuosos ≈5.' },
-                            { name: 'Examen tipo test', params: { n: 10, p: 0.7 }, description: '10 preguntas con 70% prob. acierto cada una. Media ≈7 aciertos.' },
+                            { name: 'Control de calidad', params: { n: 100, p: 0.05 }, description: '100 ítems con 5% defectos esperados. Media de defectuosos $\\approx 5$.' },
+                            { name: 'Examen tipo test', params: { n: 10, p: 0.7 }, description: '10 preguntas con 70% prob. acierto cada una. Media $\\approx 7$ aciertos.' },
                             { name: 'Encuesta grande', params: { n: 1000, p: 0.4 }, description: '1000 respuestas con 40% “sí”. Media esperada 400.' }
                         ],
                         info: {
                             title: 'Distribución Binomial',
-                            description: 'Cuenta cuántos éxitos ocurren en n ensayos independientes con probabilidad fija p (ensayos Bernoulli).',
+                            description: 'Responde a la pregunta: "Si repito un experimento $n$ veces, cada uno con probabilidad $p$ de éxito, ¿cuántos éxitos obtendré?" Ejemplos: lanzar monedas, control de calidad, encuestas con respuestas sí/no.',
                             formula: '$$P(X=k)=\\binom{n}{k} p^{k}(1-p)^{n-k}$$',
                             meanVarFormula: '$$\\mathbb{E}[X]=np\\text{,}\\quad \\operatorname{Var}(X)=np(1-p)$$',
-                            concepts: '<p><strong>Origen:</strong> Suma de n ensayos Bernoulli independientes (cada uno 0/1 con prob. p).</p><p><strong>Combinatoria:</strong> $\\binom{n}{k}$ cuenta las formas de elegir qué ensayos resultan en éxito.</p><p><strong>Aproximaciones:</strong> Si n es grande y p pequeño con np moderado, la binomial se aproxima a Poisson; si np es grande se aproxima a Normal.</p>',
+                            concepts: '<p><strong>¿Cuándo usarla?</strong> Cuando tienes un número fijo de intentos ($n$), cada intento tiene solo dos resultados posibles (éxito/fracaso), la probabilidad de éxito ($p$) es constante, y los intentos son independientes.</p><p><strong>Interpretación intuitiva:</strong> Si $p=0\\text{.}5$ (como lanzar una moneda), la distribución es simétrica. Si $p$ es muy pequeño, la mayoría de valores están cerca de 0. Si $p$ es grande, la mayoría están cerca de $n$.</p><p><strong>Valor esperado:</strong> En promedio, obtienes $np$ éxitos. Por ejemplo, con 100 intentos y $p=0\\text{.}3$, esperas unos 30 éxitos.</p>',
                                 terms: [
-                                    { symbol: '$n$', description: 'Número de ensayos independientes.' },
-                                        { symbol: '$p$', description: 'Probabilidad de éxito en cada ensayo.' },
-                                        { symbol: '$k$', description: 'Número de éxitos observados (valor discreto de la variable).' }
+                                    { symbol: '$n$', description: 'Número total de intentos o ensayos que realizas.' },
+                                    { symbol: '$p$', description: 'Probabilidad de éxito en cada intento individual (debe ser la misma para todos).' },
+                                    { symbol: '$k$', description: 'Número de éxitos que obtienes al final (lo que estás contando).' },
+                                    { symbol: '$\\binom{n}{k}$', description: 'Coeficiente binomial: número de formas de elegir $k$ éxitos entre $n$ intentos.' }
                                 ],
-                            paramExplanation: 'n amplía el rango posible (0..n). p desplaza la masa hacia la derecha (alta p) o izquierda (p baja) y afecta la dispersión. Simetría solo cuando p=0.5.'
+                            paramExplanation: 'Consejos prácticos: Si $p=0\\text{.}5$, la distribución es simétrica alrededor de $n/2$. Si $p<0\\text{.}5$, está sesgada hacia la izquierda (más probabilidad de pocos éxitos). Si $p>0\\text{.}5$, sesgada hacia la derecha (más probabilidad de muchos éxitos). La variabilidad es máxima cuando $p=0\\text{.}5$.'
                         },
                         moments: ({ n, p }) => ({ mean: n * p, variance: n * p * (1 - p) }),
                         dataFunc: ({ n, p }) => {
@@ -431,24 +411,25 @@
                         label: 'Distribución de Poisson',
                         chartType: 'bar',
                         // Permitir tasas más altas para picos intensos
-                        params: [ { id: 'lambda', label: 'Tasa Media (λ)', min: 0.01, max: 200, step: 0.01, value: 5 } ],
+                        params: [ { id: 'lambda', label: 'Tasa Media ($\\lambda$)', min: 0.01, max: 200, step: 0.01, value: 5 } ],
                         examples: [ 
                             { name: 'Clientes por hora', params: { lambda: 10 }, description: 'Llegan en promedio 10 clientes cada hora. Picos alrededor de 10.' },
                             { name: 'Llamadas por minuto', params: { lambda: 3 }, description: 'Centro de probabilidad en 3 llamadas por minuto.' },
                             { name: 'Emails spam diarios', params: { lambda: 50 }, description: 'Volumen alto; la distribución se aproxima a una normal.' },
-                            { name: 'Defectos por metro', params: { lambda: 2 }, description: 'Rara aparición de defectos: prob. de 0,1,2 defectos destacada.' }
+                            { name: 'Defectos por metro', params: { lambda: 2 }, description: 'Rara aparición de defectos: prob. de 0, 1, 2 defectos destacada.' }
                         ],
                         info: {
                             title: 'Distribución de Poisson',
-                            description: 'Cuenta eventos raros e independientes en intervalos fijos con tasa constante λ (llegadas, fallos, llamadas).',
+                            description: 'Modela "eventos raros": ¿cuántas veces ocurre algo poco frecuente en un período fijo? Ejemplos: llamadas a un call center por hora, defectos en productos, llegadas de clientes, accidentes por mes.',
                             formula: '$$P(X=k)=\\frac{\\lambda^{k} e^{-\\lambda}}{k!}$$',
                             meanVarFormula: '$$\\mathbb{E}[X]=\\lambda\\text{,}\\quad \\operatorname{Var}(X)=\\lambda$$',
-                            concepts: '<p><strong>Interpretación de $\\lambda$:</strong> tasa media de eventos por unidad (ej.: clientes/hora). Es tanto la media como la varianza.</p><p><strong>Relación con procesos de Poisson:</strong> Si los eventos siguen un proceso de Poisson, los tiempos entre eventos son Exponenciales(λ).</p><p><strong>Aproximaciones:</strong> Para λ grande la Poisson se aproxima por Normal(λ,λ).</p>',
+                            concepts: '<p><strong>¿Cuándo usarla?</strong> Cuando los eventos son raros (baja probabilidad individual), independientes, y ocurren a una tasa constante promedio. La clave es que $\\lambda$ representa tanto el promedio como la varianza.</p><p><strong>Interpretación práctica:</strong> Si $\\lambda=5$ llamadas/hora, entonces en 1 hora puedes esperar 5 llamadas en promedio, pero podrías tener 0, 3, 8, etc. La mayoría de las veces tendrás entre 2 y 8 llamadas.</p><p><strong>Propiedad única:</strong> Es la única distribución donde la media y varianza son iguales ($\\lambda$).</p>',
                                 terms: [
-                                    { symbol: '$\\lambda$', description: 'Tasa media de eventos por unidad de tiempo/espacio.' },
-                                    { symbol: '$k$', description: 'Número de eventos observados (valor discreto de la variable).' }
+                                    { symbol: '$\\lambda$', description: 'Tasa promedio de eventos por unidad de tiempo o espacio. Es tanto la media como la varianza.' },
+                                    { symbol: '$k$', description: 'Número específico de eventos que cuentas en el período observado.' },
+                                    { symbol: '$e$', description: 'Número de Euler (≈2.718), base de logaritmos naturales.' }
                                 ],
-                            paramExplanation: 'λ controla simultáneamente posición y dispersión. Aumentar λ desplaza y ensancha; para λ grande se aproxima a Normal(λ, λ).' 
+                            paramExplanation: 'Regla práctica: Si $\\lambda$ es pequeño (≤5), la distribución está muy sesgada hacia 0. Si $\\lambda$ es moderado (5-20), empieza a verse más simétrica. Si $\\lambda$ es grande (>20), se aproxima mucho a una distribución normal y puedes usar la aproximación Normal($\\lambda$, $\\sqrt{\\lambda}$).' 
                         },
                         moments: ({ lambda }) => ({ mean: lambda, variance: lambda }),
                         dataFunc: ({ lambda }) => {
@@ -466,24 +447,25 @@
                         label: 'Distribución Exponencial',
                         chartType: 'line',
                         // λ puede ser pequeño si eventos raros, o grande para procesos rápidos
-                        params: [ { id: 'lambda', label: 'Tasa (λ)', min: 0.01, max: 10, step: 0.01, value: 1 } ],
+                        params: [ { id: 'lambda', label: 'Tasa ($\\lambda$)', min: 0.01, max: 10, step: 0.01, value: 1 } ],
                         examples: [ 
                             { name: 'Llegadas rápidas', params: { lambda: 2 }, description: 'Tiempo entre eventos con tasa 2/h. Media 0.5 h.' },
                             { name: 'Vida media 2 años', params: { lambda: 0.5 }, description: 'Tiempo hasta fallo con media 2 años (memoria cero).' },
                             { name: 'Eventos muy raros', params: { lambda: 0.05 }, description: 'Tiempos largos predominan; cola larga.' },
-                            { name: 'Duración llamadas', params: { lambda: 1.5 }, description: 'Tiempos cortos comunes; media ≈0.67 min.' }
+                            { name: 'Duración llamadas', params: { lambda: 1.5 }, description: 'Tiempos cortos comunes; media $\\approx 0.67$ min.' }
                         ],
                         info: {
                             title: 'Distribución Exponencial',
-                            description: 'Modelo del tiempo de espera entre eventos Poisson. Única continua sin memoria: P(esperar más t|ya esperé s)=P(esperar más t).',
+                            description: 'Modela tiempos de espera: ¿cuánto tiempo hasta que ocurra el próximo evento? Ejemplos: tiempo hasta la próxima llamada, vida útil de componentes, tiempo entre llegadas de clientes. Su característica única es la "falta de memoria".',
                                 formula: '$$f(x;\\lambda)=\\lambda e^{-\\lambda x},\\quad x\\ge 0$$',
                             meanVarFormula: '$$\\mathbb{E}[X]=1/\\lambda\\text{,}\\quad \\operatorname{Var}(X)=1/\\lambda^{2}$$',
-                            concepts: '<p><strong>Memoria cero:</strong> La exponencial es la única distribución continua con la propiedad de falta de memoria: $P(X>s+t|X>s)=P(X>t)$.</p><p><strong>Relación con Poisson:</strong> Si los eventos ocurren según un proceso de Poisson con tasa $\\lambda$, los tiempos entre eventos son Exponenciales($\\lambda$).</p>',
+                            concepts: '<p><strong>Falta de memoria:</strong> Si has esperado 10 minutos un autobús, la probabilidad de esperar 5 minutos más es la misma que si acabaras de llegar. El tiempo ya esperado no importa.</p><p><strong>¿Cuándo usarla?</strong> Para modelar la duración hasta el próximo evento cuando los eventos siguen un proceso de Poisson. Es la distribución continua del "tiempo entre eventos raros".</p><p><strong>Interpretación práctica:</strong> Si $\\lambda=2$ eventos/hora, el tiempo promedio entre eventos es $1/\\lambda = 0\\text{.}5$ horas (30 minutos).</p>',
                                 terms: [
-                                    { symbol: '$\\lambda$', description: 'Tasa de ocurrencia; parámetros de la distribución exponencial.' },
-                                    { symbol: '$x$', description: 'Tiempo o distancia entre eventos (variable continua, $x\\ge 0$).' }
+                                    { symbol: '$\\lambda$', description: 'Tasa de eventos (eventos por unidad de tiempo). Mayor $\\lambda$ = eventos más frecuentes = esperas más cortas.' },
+                                    { symbol: '$x$', description: 'Tiempo de espera hasta el próximo evento (siempre positivo).' },
+                                    { symbol: '$1/\\lambda$', description: 'Tiempo promedio de espera entre eventos.' }
                                 ],
-                            paramExplanation: 'λ grande => esperas cortas; λ pequeño => esperas largas y cola pesada relativa.'
+                            paramExplanation: 'Regla práctica: El 63% de las esperas serán menores que el tiempo promedio ($1/\\lambda$). El 37% serán mayores. La distribución siempre tiene forma decreciente desde el inicio, con muchas esperas cortas y pocas esperas muy largas.'
                         },
                         moments: ({ lambda }) => ({ mean: 1 / lambda, variance: 1 / (lambda * lambda) }),
                         dataFunc: ({ lambda }) => {
@@ -508,16 +490,17 @@
                         ],
                         info: {
                             title: 'Distribución Uniforme',
-                            description: 'Probabilidad constante en [a,b]. Modelo de máxima neutralidad cuando nada favorece a un valor sobre otro.',
+                            description: 'La distribución más simple: todos los valores en un intervalo [a,b] son igualmente probables. Es como un rectángulo perfecto. Ejemplos: dados justos, generadores de números aleatorios, asignación aleatoria.',
                                formula: '$$f(x)=\\begin{cases}\\dfrac{1}{b-a}, & a\\le x\\le b \\\\ 0, & \\text{en otro caso}\\end{cases}$$',
                             meanVarFormula: '$$\\mathbb{E}[X]=\\frac{a+b}{2}\\text{,}\\quad \\operatorname{Var}(X)=\\frac{(b-a)^2}{12}$$',
-                            concepts: '<p><strong>Interpretación:</strong> Densidad constante en $[a,b]$, área total 1. La media es el punto medio y la varianza mide el ancho del intervalo.</p>',
+                            concepts: '<p><strong>¿Cuándo usarla?</strong> Cuando no tienes información que favorezca ningún valor particular dentro de un rango. Es el modelo de "máxima ignorancia" o neutralidad total.</p><p><strong>Interpretación visual:</strong> Es un rectángulo con altura $1/(b-a)$ para que el área total sea 1. Cuanto más ancho el intervalo, más baja la altura.</p><p><strong>Propiedad clave:</strong> La media siempre está exactamente en el centro del intervalo: $(a+b)/2$.</p>',
                                 terms: [
-                                    { symbol: '$a$', description: 'Límite inferior del intervalo donde la densidad es constante.' },
-                                    { symbol: '$b$', description: 'Límite superior del intervalo.' },
-                                    { symbol: '$x$', description: 'Valor continuo en el intervalo $[a,b]$.' }
+                                    { symbol: '$a$', description: 'Valor mínimo posible (límite inferior del rango).' },
+                                    { symbol: '$b$', description: 'Valor máximo posible (límite superior del rango).' },
+                                    { symbol: '$x$', description: 'Cualquier valor específico dentro del rango [a,b].' },
+                                    { symbol: '$1/(b-a)$', description: 'Altura del rectángulo (densidad constante en todo el intervalo).' }
                                 ],
-                            paramExplanation: 'Separar más los límites baja la altura (1/(b-a)) pero mantiene el área total 1.'
+                            paramExplanation: 'Regla práctica: El 50% de los valores están en la mitad izquierda [a, (a+b)/2] y 50% en la mitad derecha [(a+b)/2, b]. Para cualquier subintervalo de longitud L dentro de [a,b], la probabilidad es L/(b-a).'
                         },
                         moments: ({ a, b }) => ({ mean: (a + b) / 2, variance: ((b - a) * (b - a)) / 12 }),
                         dataFunc: ({ a, b }) => {
@@ -536,21 +519,21 @@
                         label: 'Distribución Gamma',
                         chartType: 'line',
                         params: [ 
-                            { id: 'alpha', label: 'Forma (α)', min: 0.1, max: 50, step: 0.1, value: 2 },
-                            { id: 'beta', label: 'Escala (β)', min: 0.01, max: 20, step: 0.01, value: 1 }
+                            { id: 'alpha', label: 'Forma ($\\alpha$)', min: 0.1, max: 50, step: 0.1, value: 2 },
+                            { id: 'beta', label: 'Escala ($\\beta$)', min: 0.01, max: 20, step: 0.01, value: 1 }
                         ],
                         examples: [ 
-                            { name: '3er cliente', params: { alpha: 3, beta: 1 }, description: 'Suma de 3 esperas exponenciales media 1.' },
-                            { name: 'Vida útil (variabilidad alta)', params: { alpha: 2, beta: 2 }, description: 'Media 4; dispersión elevada.' },
-                            { name: 'Servicio rápido', params: { alpha: 1.5, beta: 0.5 }, description: 'Pico inicial y decaimiento moderado.' },
-                            { name: 'Chi-cuadrado k=4', params: { alpha: 2, beta: 2 }, description: 'Chi²(k)=Gamma(k/2,2) ⇒ aquí k=4 (α=2, β=2).' }
+                            { name: 'Tiempo hasta 3er cliente', params: { alpha: 3, beta: 1 }, description: 'Si los clientes llegan cada 1 minuto en promedio, ¿cuánto tardas en atender al 3er cliente? Media: 3 minutos. Forma de campana sesgada hacia la derecha.' },
+                            { name: 'Duración de una tarea compleja', params: { alpha: 2, beta: 2 }, description: 'Una tarea que toma en promedio 4 horas pero con alta variabilidad. Algunos casos rápidos (1-2h), otros muy lentos (8-10h).' },
+                            { name: 'Tiempo de respuesta del servidor', params: { alpha: 1.5, beta: 0.5 }, description: 'Servidor optimizado: la mayoría de respuestas son rápidas (0.2-1 seg) pero algunas pueden tardar más. Media: 0.75 segundos.' },
+                            { name: 'Distribución estadística especial', params: { alpha: 2, beta: 2 }, description: 'Caso especial: esta configuración es equivalente a una distribución Chi-cuadrado con 4 grados de libertad, usada en tests estadísticos.' }
                         ],
                         info: {
                             title: 'Distribución Gamma',
-                            description: 'Modelo flexible de tiempos de espera acumulados. Con α entero: tiempo hasta el α-ésimo evento de Poisson.',
-                            formula: '$$f(x;\\alpha,\\beta)=\\dfrac{1}{\\beta^{\\alpha}\\Gamma(\\alpha)} x^{\\alpha-1} e^{-x/\\beta},\\quad x\\ge 0$$',
+                            description: 'Una distribución muy flexible para modelar tiempos o cantidades positivas. Caso especial: si $\\alpha$ es entero, modela el tiempo hasta el $\\alpha$-ésimo evento en un proceso Poisson (suma de $\\alpha$ distribuciones exponenciales).',
+                            formula: '$$f(x;\\alpha\\text{,}\\beta)=\\dfrac{1}{\\beta^{\\alpha}\\Gamma(\\alpha)} x^{\\alpha-1} e^{-x/\\beta},\\quad x\\ge 0$$',
                             meanVarFormula: '$$\\mathbb{E}[X]=\\alpha\\beta\\text{,}\\quad \\operatorname{Var}(X)=\\alpha\\beta^{2}$$',
-                            concepts: '<p><strong>Función Gamma:</strong> $\\Gamma(z)$ generaliza el factorial: $\\Gamma(n)=(n-1)!$ para enteros positivos y satisface $\\Gamma(z+1)=z\\Gamma(z)$.</p><p><strong>Parámetros:</strong> $\\alpha$ (forma) controla asimetría y altura del pico; $\\beta$ (escala) estira/encoge el eje $x$.</p><p><strong>Relación:</strong> La Chi-cuadrado con k grados se escribe $\\chi^2(k)=\\Gamma(k/2\\text{,}2)$ en esta parametrización.</p>',
+                            concepts: '<p><strong>¿Cuándo usarla?</strong> Para modelar tiempos de vida, duraciones de procesos, tamaños de eventos positivos. Es muy flexible: puede tener forma exponencial decreciente, forma de campana sesgada, o casi simétrica.</p><p><strong>Interpretación de parámetros:</strong> $\\alpha$ controla la "forma": $\\alpha<1$ da decaimiento inmediato, $\\alpha=1$ es exponencial, $\\alpha>1$ crea una "joroba". $\\beta$ controla la escala temporal.</p><p><strong>Relaciones importantes:</strong> La chi-cuadrado y la exponencial son casos especiales de la Gamma.</p>',
                                 terms: [
                                     { symbol: '$\\alpha$', description: 'Parámetro de forma (controla la asimetría y el pico).' },
                                     { symbol: '$\\beta$', description: 'Parámetro de escala (estira/encoge el eje x).' },
@@ -576,21 +559,21 @@
                         label: 'Distribución Beta',
                         chartType: 'line',
                         params: [ 
-                            { id: 'alpha', label: 'Forma α', min: 0.01, max: 50, step: 0.01, value: 2 },
-                            { id: 'beta', label: 'Forma β', min: 0.01, max: 50, step: 0.01, value: 5 }
+                            { id: 'alpha', label: 'Forma $\\alpha$', min: 0.01, max: 50, step: 0.01, value: 2 },
+                            { id: 'beta', label: 'Forma $\\beta$', min: 0.01, max: 50, step: 0.01, value: 5 }
                         ],
                         examples: [ 
-                            { name: 'Proporción votos', params: { alpha: 2, beta: 5 }, description: 'Preferencia concentrada hacia valores bajos (sesgo a 0).' },
-                            { name: 'Efectividad fármaco', params: { alpha: 3, beta: 3 }, description: 'Forma simétrica centrada en 0.5.' },
-                            { name: 'Conversión baja', params: { alpha: 1, beta: 9 }, description: 'Alta densidad cerca de 0.' },
-                            { name: 'Uniforme', params: { alpha: 1, beta: 1 }, description: 'Sin preferencia: densidad plana.' }
+                            { name: 'Porcentaje de votos a favor', params: { alpha: 2, beta: 5 }, description: 'Encuesta política: creemos que el candidato tendrá entre 10-40% de votos, con mayor probabilidad hacia valores bajos. Media: 29%.' },
+                            { name: 'Efectividad de tratamiento médico', params: { alpha: 3, beta: 3 }, description: 'Un medicamento nuevo: sin sesgo inicial, esperamos que cure entre 30-70% de pacientes. Distribución simétrica, media: 50%.' },
+                            { name: 'Tasa de conversión web baja', params: { alpha: 1, beta: 9 }, description: 'Sitio web nuevo: esperamos conversión muy baja (0.5-15%), con alta probabilidad de estar cerca del 0%. Media: 10%.' },
+                            { name: 'Sin información previa', params: { alpha: 1, beta: 1 }, description: 'No tenemos idea del resultado: cualquier porcentaje entre 0% y 100% es igualmente probable. Distribución completamente plana.' }
                         ],
                         info: {
                             title: 'Distribución Beta',
-                            description: 'Distribución sobre [0,1] para probabilidades/proporciones. Muy flexible: sesgos, forma de U o campana.',
+                            description: 'La distribución perfecta para porcentajes, proporciones y probabilidades (valores entre 0 y 1). Extremadamente flexible: puede ser plana, en forma de U, campana, o sesgada hacia cualquier extremo.',
                             formula: '$$f(x;\\alpha,\\beta)=\\dfrac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)} x^{\\alpha-1}(1-x)^{\\beta-1},\\quad 0\\le x\\le 1$$',
                             meanVarFormula: '$$\\mathbb{E}[X]=\\frac{\\alpha}{\\alpha+\\beta}, \\; \\operatorname{Var}(X)=\\frac{\\alpha\\beta}{(\\alpha+\\beta)^2(\\alpha+\\beta+1)}$$',
-                            concepts: '<p><strong>Función Beta:</strong> La constante normalizadora $\\dfrac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)}$ es inversa a la función Beta $B(\\alpha,\\beta)=\\dfrac{\\Gamma(\\alpha)\\Gamma(\\beta)}{\\Gamma(\\alpha+\\beta)}$.</p><p><strong>Uso práctico:</strong> Modelo flexible para probabilidades: sirve como prior conjugado en inferencia bayesiana para Bernoulli/binomial.</p>',
+                            concepts: '<p><strong>¿Cuándo usarla?</strong> Para modelar tasas de conversión, porcentajes de aprobación, probabilidades desconocidas, efectividad de tratamientos. Es especialmente útil en estadística bayesiana.</p><p><strong>Interpretación intuitiva:</strong> Piensa en $\\alpha$ como "evidencia a favor" y $\\beta$ como "evidencia en contra". Si $\\alpha > \\beta$, la distribución se sesga hacia 1. Si $\\beta > \\alpha$, se sesga hacia 0.</p><p><strong>Casos especiales:</strong> Beta(1,1) es uniforme. Beta(0.5,0.5) tiene forma de U. Beta(2,2) es simétrica y centrada.</p>',
                                 terms: [
                                     { symbol: '$\\alpha$', description: 'Parámetro de forma que empuja la masa hacia 1 cuando es grande.' },
                                     { symbol: '$\\beta$', description: 'Parámetro de forma que empuja la masa hacia 0 cuando es grande.' },
@@ -617,22 +600,23 @@
                             { id: 'p', label: 'Probabilidad de Éxito (p)', min: 0.001, max: 1, step: 0.001, value: 0.2 }
                         ],
                         examples: [ 
-                            { name: 'Dado (cara 6)', params: { p: 1/6 }, description: 'Esperas de media 6 lanzamientos para un 6.' },
-                            { name: 'Llamadas a venta', params: { p: 0.2 }, description: 'Éxito medio tras 5 intentos.' },
-                            { name: 'Examen repetido', params: { p: 0.7 }, description: 'Alta prob. de aprobar rápido (media ≈1.43 intentos).' },
-                            { name: 'Moneda a cara', params: { p: 0.5 }, description: 'Media 2 lanzamientos hasta primera cara.' }
+                            { name: 'Lanzar dado hasta sacar 6', params: { p: 1/6 }, description: 'Juegas hasta sacar un 6. En promedio necesitas 6 lanzamientos, pero podrías tener suerte y sacarlo al 1er intento, o mala suerte y necesitar 20.' },
+                            { name: 'Vendedor telefónico', params: { p: 0.2 }, description: 'Llamas hasta cerrar una venta. Con 20% de éxito por llamada, en promedio necesitas 5 llamadas. Pero algunos días lo logras a la 1ra, otros días tardas 15.' },
+                            { name: 'Aprobar un examen difícil', params: { p: 0.7 }, description: 'Examen con 70% probabilidad de aprobar. Lo más probable es aprobarlo en el 1er intento, pero a veces necesitas 2 o 3 intentos. Media: 1.4 intentos.' },
+                            { name: 'Lanzar moneda hasta cara', params: { p: 0.5 }, description: 'Lanzas hasta obtener cara. 50% de las veces lo consigues al 1er lanzamiento, 25% al 2do, 12.5% al 3ro, etc. Media: 2 lanzamientos.' }
                         ],
                         info: {
                             title: 'Distribución Geométrica',
                             description: 'Número de ensayos hasta el primer éxito. Versión discreta “sin memoria” análoga a la exponencial.',
-                            formula: '$$P(X=k)=(1-p)^{k-1}p,\\quad k=1,2,\\ldots$$',
+                            formula: '$$P(X=k)=(1-p)^{k-1}p,\\quad k=1\\text{,}2,\\ldots$$',
                             meanVarFormula: '$$\\mathbb{E}[X]=\\frac{1}{p}\\text{,}\\quad \\operatorname{Var}(X)=\\frac{1-p}{p^{2}}$$',
                             concepts: '<p><strong>Memoria cero (discreta):</strong> La geométrica satisface $P(X>n+m|X>n)=P(X>m)$; el número adicional de intentos no depende del pasado.</p><p><strong>Interpretación:</strong> Es la versión discreta del modelo exponencial para tiempos hasta el primer evento.</p>',
                                 terms: [
-                                    { symbol: '$p$', description: 'Probabilidad de éxito en cada ensayo.' },
-                                    { symbol: '$k$', description: 'Número de ensayos hasta el primer éxito (soporte $k=1,2,\\ldots$).' }
+                                    { symbol: '$p$', description: 'Probabilidad de éxito en cada intento individual (debe ser constante).' },
+                                    { symbol: '$k$', description: 'Número del intento en el que obtienes el primer éxito (1, 2, 3, ...).' },
+                                    { symbol: '$(1-p)^{k-1}$', description: 'Probabilidad de fallar en los primeros k-1 intentos.' }
                                 ],
-                            paramExplanation: 'p grande ⇒ probabilidad se concentra en valores pequeños. p pequeño ⇒ cola larga.'
+                            paramExplanation: 'Regla práctica: Si $p$ es alto (≥0.5), la mayoría de éxitos ocurren en los primeros intentos. Si $p$ es bajo (≤0.1), puedes necesitar muchos intentos, con una "cola larga" de posibilidades. El número promedio de intentos es siempre $1/p$.'
                         },
                         moments: ({ p }) => ({ mean: 1 / p, variance: (1 - p) / (p * p) }),
                         dataFunc: ({ p }) => {
@@ -695,14 +679,33 @@
                 controlsPanel.innerHTML = `<h2>Parámetros</h2>`;
                 dist.params.forEach(p => {
                     const value = currentParams[p.id];
+                    const formattedValue = typeof value === 'number' ? 
+                        (value >= 10 ? value.toFixed(1) : value.toFixed(2)) : value;
                     controlsPanel.innerHTML += `
                         <div class="control-group">
-                            <label for="${p.id}">${p.label}: <span id="val-${p.id}">${value}</span></label>
+                            <label for="${p.id}">${p.label}: <span id="val-${p.id}">${formattedValue}</span></label>
                             <input type="range" id="${p.id}" min="${p.min}" max="${p.max}" step="${p.step}" value="${value}">
                         </div>
                     `;
                 });
-                
+
+                // Momentos (media y varianza) justo debajo de los parámetros
+                const formatMoment = (x) => (Math.abs(x) >= 1000 || Math.abs(x) < 0.001) ? x.toExponential(3) : x.toFixed(4).replace(/0+$/,'').replace(/\.$/,'');
+                if (typeof dist.moments === 'function') {
+                    const mv = dist.moments(state.params[distKey]);
+                    controlsPanel.innerHTML += `
+                        <div id="moments-controls" class="panel" style="background:var(--border-color);margin:10px 0 0 0;padding:10px;border-radius:6px;">
+                            <div style="display:flex;gap:1rem;align-items:center;flex-wrap:nowrap;">
+                                <div style="white-space:nowrap;"><strong>Media E[X]:</strong>&nbsp;${formatMoment(mv.mean)}</div>
+                                <div style="white-space:nowrap;"><strong>Varianza Var[X]:</strong>&nbsp;${formatMoment(mv.variance)}</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // asegurar que el contenedor existe aunque no haya momentos
+                    controlsPanel.innerHTML += `<div id="moments-controls"></div>`;
+                }
+
                 // Add example buttons
                 const examplesContainer = document.createElement('div');
                 examplesContainer.style.marginTop = '10px';
@@ -724,31 +727,20 @@
                 });
                 controlsPanel.appendChild(examplesContainer);
 
-
                 // 2. Update Info Panel
                 const example = state.selectedExample[distKey] || dist.examples[0];
                 infoPanel.innerHTML = `
                     <h2>${dist.info.title}</h2>
                     <p>${dist.info.description}</p>
-                    ${ (dist.info.formula || dist.info.meanVarFormula || dist.info.concepts) ? `<details style="margin:.5rem 1rem;"><summary style="font-weight:bold; cursor:pointer;">Conceptos y fórmulas</summary><div style="margin-top:.5rem;">${dist.info.formula ? `<div class="formula">${dist.info.formula}</div>` : ''}${dist.info.meanVarFormula ? `<div class="formula">${dist.info.meanVarFormula}</div>` : ''}${dist.info.concepts ? dist.info.concepts : ''}</div></details>` : '' }
-                    ${ dist.info.terms ? `<details style="margin:.5rem 1rem;"><summary style="font-weight:bold; cursor:pointer;">Explicación de términos</summary><div style="margin-top:.5rem;"><ul style="padding-left:1rem; margin:0">${dist.info.terms.map(t => `<li><strong>${t.symbol}</strong>: ${t.description}</li>`).join('')}</ul></div></details>` : ''}
-                    <div id\="momentos"></div>
+                    ${ (dist.info.formula || dist.info.meanVarFormula || dist.info.concepts || dist.info.terms) ? `<details style="margin:.5rem 1rem;"><summary style="font-weight:bold; cursor:pointer;">Conceptos, fórmulas y términos</summary><div style="margin-top:.5rem;">${dist.info.formula ? `<div class="formula">${dist.info.formula}</div>` : ''}${dist.info.meanVarFormula ? `<div class="formula">${dist.info.meanVarFormula}</div>` : ''}${dist.info.concepts ? dist.info.concepts : ''}${dist.info.terms ? `<hr style="margin:.5rem 0;"><h4 style="margin:.25rem 0;">Términos</h4><ul style="padding-left:1rem; margin:0">${dist.info.terms.map(t => `<li><strong>${t.symbol}</strong>: ${t.description}</li>`).join('')}</ul>` : ''}</div></details>` : '' }
                     <p>${dist.info.paramExplanation}</p>
                     <hr style="margin:1rem 0; border:0; border-top:1px solid var(--border-color);">
                     <h3 style="margin:0 0 .25rem 0">Ejemplo seleccionado</h3>
                     <p style="margin:.25rem 0 .5rem 0"><strong>${example.name}</strong></p>
                     <p style="margin:.25rem 0 .5rem 0">${example.description || ''}</p>
                     <p style="margin:.25rem 0 .5rem 0"><em>Parámetros:</em> ${Object.entries(example.params).map(([k,v]) => `${k}=${typeof v==='number'? (Math.abs(v)>=1000||Math.abs(v)<0.001? v.toExponential(3): v.toString()):v}`).join(', ')}</p>
-                    <p class="foot-note"><strong>Nota:</strong> Las fórmulas se renderizan con MathJax. Ajusta los parámetros para observar cómo cambia la forma de la función.</p>
+                    <p class="foot-note"><strong>Nota:</strong> Ajusta los parámetros para observar cómo cambia la forma de la función.</p>
                 `;
-
-                // Momentos (media y varianza)
-                if (typeof dist.moments === 'function') {
-                    const mv = dist.moments(state.params[distKey]);
-                    const format = (x) => (Math.abs(x) >= 1000 || Math.abs(x) < 0.001) ? x.toExponential(3) : x.toFixed(4).replace(/0+$/,'').replace(/\.$/,'');
-                    const momentosDiv = infoPanel.querySelector('#momentos');
-                    momentosDiv.innerHTML = `<p><strong>Media E[X]:</strong> ${format(mv.mean)} &nbsp; | &nbsp; <strong>Varianza Var[X]:</strong> ${format(mv.variance)}</p>`;
-                }
 
                 // Re-render MathJax robusto con reintentos
                 function safeTypeset(retries = 3) {
@@ -773,7 +765,25 @@
                     slider.addEventListener('input', (e) => {
                         const newValue = parseFloat(e.target.value);
                         state.params[distKey][p.id] = newValue;
-                        document.getElementById(`val-${p.id}`).textContent = newValue.toFixed(2);
+                        const formattedValue = newValue >= 10 ? newValue.toFixed(1) : newValue.toFixed(2);
+                        document.getElementById(`val-${p.id}`).textContent = formattedValue;
+                        // recalcular momentos si existen
+                        if (typeof dist.moments === 'function') {
+                            try {
+                                const mv = dist.moments(state.params[distKey]);
+                                const momentsDiv = document.getElementById('moments-controls');
+                                if (momentsDiv) {
+                                    momentsDiv.innerHTML = `
+                                        <div style="display:flex;gap:1rem;align-items:center;flex-wrap:nowrap;">
+                                            <div style="white-space:nowrap;"><strong>Media E[X]:</strong>&nbsp;${formatMoment(mv.mean)}</div>
+                                            <div style="white-space:nowrap;"><strong>Varianza Var[X]:</strong>&nbsp;${formatMoment(mv.variance)}</div>
+                                        </div>
+                                    `;
+                                }
+                            } catch (err) {
+                                console.error('Error calculando momentos:', err);
+                            }
+                        }
                         updateChart();
                     });
                 });
@@ -884,6 +894,21 @@
                 themeToggle.textContent = isDark ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
             });
             applyStoredTheme();
+
+            // --- Panel de Ayuda Matemática ---
+            const mathHelpToggle = document.getElementById('math-help-toggle');
+            const mathHelpPanel = document.getElementById('math-help-panel');
+            mathHelpToggle.addEventListener('click', () => {
+                const isVisible = mathHelpPanel.style.display !== 'none';
+                mathHelpPanel.style.display = isVisible ? 'none' : 'block';
+                mathHelpToggle.setAttribute('aria-pressed', isVisible ? 'false' : 'true');
+                mathHelpToggle.textContent = isVisible ? '📚 Conceptos Matemáticos' : '❌ Cerrar Ayuda';
+                
+                // Re-render MathJax para el nuevo contenido si está visible
+                if (!isVisible && window.MathJax && window.MathJax.typesetPromise) {
+                    window.MathJax.typesetPromise([mathHelpPanel]).catch(err => console.error(err));
+                }
+            });
 
             // --- Región aria-live para anuncios accesibles ---
             const liveRegion = document.createElement('div');
