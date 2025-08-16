@@ -13,7 +13,15 @@
             tex: {
                 inlineMath: [['$','$'], ['\\(','\\)']],
                 displayMath: [['$$','$$']],
-                packages: {'[+]': ['base','ams']},
+                // añadir paquetes útiles: physics, mhchem (química), mathtools y ams
+                packages: {'[+]': ['base','ams','amscd','physics','mhchem','mathtools']},
+                // habilitar macros comunes y compatibilidad con entrada en español
+                macros: {
+                    Re: '\\mathbb{R}',
+                    N: '\\mathbb{N}',
+                    Z: '\\mathbb{Z}',
+                    vect: ['\\mathbf{#1}',1]
+                },
                 digits: /[0-9]/
             },
             options: {
@@ -21,7 +29,8 @@
                 renderActions: {
                     addMenu: [] // sin menú contextual
                 }
-            }
+            },
+            loader: { load: ['[tex]/physics','[tex]/mhchem','[tex]/mathtools'] }
         };
     </script>
     <!-- MathJax para fórmulas LaTeX (usar defer para garantizar orden) -->
@@ -197,6 +206,70 @@
 
         body.dark .MathJax, body.dark .mjx-math { color: var(--main-text-color) !important; }
 
+        /* Estilos específicos para el panel de ayuda: acordeón elegante */
+        .help-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .help-section {
+            background: var(--panel-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        .help-section:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 16px rgba(31,111,235,0.08);
+        }
+        .help-section summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--surface-2), transparent);
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--main-text-color);
+            list-style: none;
+            transition: background 0.2s ease;
+        }
+        .help-section summary::-webkit-details-marker { display: none; }
+        .help-section summary::after {
+            content: '▼';
+            font-size: 12px;
+            color: var(--primary-color);
+            transition: transform 0.2s ease;
+        }
+        .help-section[open] summary::after { transform: rotate(180deg); }
+        .help-section summary:hover {
+            background: linear-gradient(135deg, rgba(31,111,235,0.05), transparent);
+        }
+        .help-content {
+            padding: 0 20px 20px 20px;
+            color: var(--muted-text);
+            line-height: 1.6;
+        }
+        .help-content p { margin: 0 0 12px 0; }
+        .help-content .math-display {
+            margin: 16px 0;
+            padding: 14px;
+            background: var(--surface-2);
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid var(--primary-color);
+        }
+        .help-content .math-inline {
+            background: rgba(31,111,235,0.08);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+        }
+        .help-content strong { color: var(--main-text-color); }
+        .help-emoji { font-size: 18px; margin-right: 8px; }
+
         .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
         .foot-note { font-size:0.85rem; color:var(--muted-text); margin-top:10px; }
@@ -235,73 +308,97 @@
         <!-- Panel de Ayuda Matemática (inicialmente oculto) -->
         <div id="math-help-panel" class="panel" style="display: none;">
             <h2>📚 Conceptos Matemáticos Explicados</h2>
-            <div style="display: grid; gap: 1rem;">
-                
-                <details>
-                    <summary style="font-weight: bold; cursor: pointer; color: var(--primary-color);">🧮 Media (Valor Esperado) - E[X]</summary>
-                    <div style="padding: 0.5rem 0;">
+            <div class="help-accordion">
+
+                <details class="help-section">
+                    <summary><span class="help-emoji">🧮</span>Media (Valor Esperado) — E[X]</summary>
+                    <div class="help-content">
                         <p><strong>¿Qué es?</strong> El promedio de todos los valores posibles, ponderado por su probabilidad. Si repites el experimento muchas veces, la media es el valor promedio que obtienes.</p>
-                        <p><strong>Ejemplo:</strong> Si lanzas un dado justo, la media es (1+2+3+4+5+6)/6 = 3.5. No puedes sacar 3.5 en un lanzamiento, pero es el promedio a largo plazo.</p>
+                        
+                        <p><strong>Ejemplo práctico:</strong> Para un dado justo:</p>
+                        <div class="math-display">$$E[X] = \frac{1+2+3+4+5+6}{6} = 3\text{.}5$$</div>
+                        
+                        <p>No puedes sacar 3.5 en un lanzamiento, pero es el promedio a largo plazo. La media es el "centro de gravedad" de la distribución.</p>
                     </div>
                 </details>
 
-                <details>
-                    <summary style="font-weight: bold; cursor: pointer; color: var(--primary-color);">📊 Varianza - Var(X)</summary>
-                    <div style="padding: 0.5rem 0;">
-                        <p><strong>¿Qué es?</strong> Mide qué tan "dispersos" están los valores alrededor de la media. Mayor varianza = mayor dispersión = resultados más impredecibles.</p>
+                <details class="help-section">
+                    <summary><span class="help-emoji">📊</span>Varianza — Var(X)</summary>
+                    <div class="help-content">
+                        <p><strong>¿Qué mide?</strong> Qué tan "dispersos" están los valores alrededor de la media. Mayor varianza = mayor dispersión = resultados más impredecibles.</p>
+                        
+                        <div class="math-display">$$\sigma = \sqrt{\text{Var}(X)}$$</div>
+                        
                         <p><strong>Ejemplo:</strong> Dos exámenes con media 70: uno con varianza 4 (notas entre 68-72), otro con varianza 100 (notas entre 50-90). Misma media, muy diferente dispersión.</p>
-                        <p><strong>Desviación estándar:</strong> $\\sigma = \\sqrt{\\text{Varianza}}$ - más fácil de interpretar porque está en las mismas unidades que los datos.</p>
+                        
+                        <p><strong>Regla práctica:</strong> Aproximadamente <span class="math-inline">68%</span> de los datos caen dentro de <span class="math-inline">μ ± σ</span>, <span class="math-inline">95%</span> dentro de <span class="math-inline">μ ± 2σ</span>.</p>
                     </div>
                 </details>
 
-                <details>
-                    <summary style="font-weight: bold; cursor: pointer; color: var(--primary-color);">🔢 Factorial - n!</summary>
-                    <div style="padding: 0.5rem 0;">
-                        <p><strong>¿Qué es?</strong> $n! = n \\times (n-1) \\times (n-2) \\times \\ldots \\times 2 \\times 1$</p>
-                        <p><strong>Ejemplos:</strong> $3! = 3 \\times 2 \\times 1 = 6$, $5! = 5 \\times 4 \\times 3 \\times 2 \\times 1 = 120$</p>
+                <details class="help-section">
+                    <summary><span class="help-emoji">🔢</span>Factorial — n!</summary>
+                    <div class="help-content">
+                        <p><strong>Definición:</strong></p>
+                        <div class="math-display">$$n! = n \times (n-1) \times (n-2) \times \ldots \times 2 \times 1$$</div>
+                        
+                        <p><strong>Ejemplos:</strong> <span class="math-inline">\( 5! = 5 \times 4 \times 3! = 6\)</span>, <span class="math-inline">\( 5! = 120\) </span></p>
+                        
                         <p><strong>¿Para qué sirve?</strong> Cuenta el número de formas de ordenar n objetos. Por ejemplo, 5! = 120 formas de ordenar 5 personas en una fila.</p>
                     </div>
                 </details>
 
-                <details>
-                    <summary style="font-weight: bold; cursor: pointer; color: var(--primary-color);">🎯 Coeficiente Binomial - "n eligir k"</summary>
-                    <div style="padding: 0.5rem 0;">
-                        <p><strong>Fórmula:</strong> $\\binom{n}{k} = \\frac{n!}{k!(n-k)!}$</p>
+                <details class="help-section">
+                    <summary><span class="help-emoji">🎯</span>Coeficiente Binomial — "n eligir k"</summary>
+                    <div class="help-content">
+                        <p><strong>Fórmula:</strong></p>
+                        <div class="math-display">$$\binom{n}{k} = \frac{n!}{k!(n-k)!}$$</div>
+                        
                         <p><strong>¿Qué cuenta?</strong> El número de formas de elegir k objetos de un grupo de n objetos, cuando el orden no importa.</p>
-                        <p><strong>Ejemplo:</strong> $\\binom{5}{2} = \\frac{5!}{2!3!} = \\frac{120}{2 \\times 6} = 10$ formas de elegir 2 personas de un grupo de 5.</p>
+                        
+                        <p><strong>Ejemplo:</strong> <span class="math-inline">\( \binom{5}{2} = \frac{5!}{2!3!} = 10 \)</span> formas de elegir 2 personas de un grupo de 5.</p>
+                        
                         <p><strong>En la vida real:</strong> Combinaciones de lotería, equipos deportivos, comités.</p>
                     </div>
                 </details>
 
-                <details>
-                    <summary style="font-weight: bold; cursor: pointer; color: var(--primary-color);">⚡ Número e (≈ 2.718)</summary>
-                    <div style="padding: 0.5rem 0;">
+                <details class="help-section">
+                    <summary><span class="help-emoji">⚡</span>Número e (≈ 2.718)</summary>
+                    <div class="help-content">
                         <p><strong>¿Qué es?</strong> Una constante matemática especial, como π pero para crecimiento exponencial y procesos de decaimiento.</p>
+                        
+                        <div class="math-display">$$e^x \text{ (crecimiento)}, \quad e^{-x} \text{ (decaimiento)}$$</div>
+                        
                         <p><strong>¿Dónde aparece?</strong> En interés compuesto continuo, crecimiento poblacional, decaimiento radioactivo, y muchas distribuciones de probabilidad.</p>
-                        <p><strong>Función exponencial:</strong> $e^x$ crece muy rápido, $e^{-x}$ decrece muy rápido hacia 0.</p>
                     </div>
                 </details>
 
-                <details>
-                    <summary style="font-weight: bold; cursor: pointer; color: var(--primary-color);">🌟 Función Gamma - Γ(n)</summary>
-                    <div style="padding: 0.5rem 0;">
+                <details class="help-section">
+                    <summary><span class="help-emoji">🌟</span>Función Gamma — Γ(n)</summary>
+                    <div class="help-content">
                         <p><strong>¿Qué es?</strong> Una generalización del factorial para números no enteros.</p>
-                        <p><strong>Relación con factorial:</strong> $\\Gamma(n) = (n-1)!$ para números enteros positivos.</p>
-                        <p><strong>Ejemplos:</strong> $\\Gamma(4) = 3! = 6$, $\\Gamma(5) = 4! = 24$</p>
+                        
+                        <div class="math-display">$$\Gamma(n) = (n-1)! \text{ para enteros positivos}$$</div>
+                        
+                        <p><strong>Ejemplos:</strong> <span class="math-inline">\( \Gamma(4) = 3! = 6\)</span>, <span class="math-inline">\( \Gamma(5) = 4! = 24\)</span></p>
+                        
                         <p><strong>¿Para qué sirve?</strong> Permite definir distribuciones continuas como la Gamma y Beta de forma matemáticamente elegante.</p>
                     </div>
                 </details>
 
-                <details>
-                    <summary style="font-weight: bold; cursor: pointer; color: var(--primary-color);">📈 ¿Qué es una Distribución de Probabilidad?</summary>
-                    <div style="padding: 0.5rem 0;">
+                <details class="help-section">
+                    <summary><span class="help-emoji">📈</span>¿Qué es una Distribución de Probabilidad?</summary>
+                    <div class="help-content">
                         <p><strong>Idea básica:</strong> Una regla que te dice qué tan probable es cada resultado posible en un experimento aleatorio.</p>
-                        <p><strong>Discreta vs Continua:</strong></p>
-                        <ul>
+                        
+                        <p><strong>Tipos principales:</strong></p>
+                        <ul style="margin: 12px 0; padding-left: 20px;">
                             <li><strong>Discreta:</strong> Resultados contables (1, 2, 3, ...). Ejemplo: número de caras al lanzar monedas.</li>
                             <li><strong>Continua:</strong> Resultados en rangos (cualquier número real). Ejemplo: altura de personas.</li>
                         </ul>
+                        
                         <p><strong>Propiedad clave:</strong> Todas las probabilidades suman 1 (100% de certeza de que algo ocurra).</p>
+                        
+                        <div class="math-display">$$\sum P(x_i) = 1 \text{ (discreta)} \quad \text{o} \quad \int_{-\infty}^{\infty} f(x)dx = 1 \text{ (continua)}$$</div>
                     </div>
                 </details>
 
@@ -340,8 +437,8 @@
                         label: 'Distribución Normal',
                         chartType: 'line',
                         params: [
-                            { id: 'mu', label: 'Media ($\\mu$)', min: 30, max: 220, step: 1, value: 170 },
-                            { id: 'sigma', label: 'Desviación Estándar ($\\sigma$)', min: 0.1, max: 50, step: 0.1, value: 7.5 }
+                            { id: 'mu', label: 'Media (μ)', min: 30, max: 220, step: 1, value: 170 },
+                            { id: 'sigma', label: 'Desviación Estándar (σ)', min: 0.1, max: 50, step: 0.1, value: 7.5 }
                         ],
                         examples: [
                             { name: 'Alturas adultos', params: { mu: 170, sigma: 7.5 }, description: 'Modela alturas (en cm). Aproximadamente 68% de las personas están entre 162.5 y 177.5 cm.' },
@@ -411,7 +508,7 @@
                         label: 'Distribución de Poisson',
                         chartType: 'bar',
                         // Permitir tasas más altas para picos intensos
-                        params: [ { id: 'lambda', label: 'Tasa Media ($\\lambda$)', min: 0.01, max: 200, step: 0.01, value: 5 } ],
+                        params: [ { id: 'lambda', label: 'Tasa Media (λ)', min: 0.01, max: 200, step: 0.01, value: 5 } ],
                         examples: [ 
                             { name: 'Clientes por hora', params: { lambda: 10 }, description: 'Llegan en promedio 10 clientes cada hora. Picos alrededor de 10.' },
                             { name: 'Llamadas por minuto', params: { lambda: 3 }, description: 'Centro de probabilidad en 3 llamadas por minuto.' },
@@ -447,7 +544,7 @@
                         label: 'Distribución Exponencial',
                         chartType: 'line',
                         // λ puede ser pequeño si eventos raros, o grande para procesos rápidos
-                        params: [ { id: 'lambda', label: 'Tasa ($\\lambda$)', min: 0.01, max: 10, step: 0.01, value: 1 } ],
+                        params: [ { id: 'lambda', label: 'Tasa (λ)', min: 0.01, max: 10, step: 0.01, value: 1 } ],
                         examples: [ 
                             { name: 'Llegadas rápidas', params: { lambda: 2 }, description: 'Tiempo entre eventos con tasa 2/h. Media 0.5 h.' },
                             { name: 'Vida media 2 años', params: { lambda: 0.5 }, description: 'Tiempo hasta fallo con media 2 años (memoria cero).' },
@@ -519,8 +616,8 @@
                         label: 'Distribución Gamma',
                         chartType: 'line',
                         params: [ 
-                            { id: 'alpha', label: 'Forma ($\\alpha$)', min: 0.1, max: 50, step: 0.1, value: 2 },
-                            { id: 'beta', label: 'Escala ($\\beta$)', min: 0.01, max: 20, step: 0.01, value: 1 }
+                            { id: 'alpha', label: 'Forma (α)', min: 0.1, max: 50, step: 0.1, value: 2 },
+                            { id: 'beta', label: 'Escala (β)', min: 0.01, max: 20, step: 0.01, value: 1 }
                         ],
                         examples: [ 
                             { name: 'Tiempo hasta 3er cliente', params: { alpha: 3, beta: 1 }, description: 'Si los clientes llegan cada 1 minuto en promedio, ¿cuánto tardas en atender al 3er cliente? Media: 3 minutos. Forma de campana sesgada hacia la derecha.' },
@@ -559,8 +656,8 @@
                         label: 'Distribución Beta',
                         chartType: 'line',
                         params: [ 
-                            { id: 'alpha', label: 'Forma $\\alpha$', min: 0.01, max: 50, step: 0.01, value: 2 },
-                            { id: 'beta', label: 'Forma $\\beta$', min: 0.01, max: 50, step: 0.01, value: 5 }
+                            { id: 'alpha', label: 'Forma α', min: 0.01, max: 50, step: 0.01, value: 2 },
+                            { id: 'beta', label: 'Forma β', min: 0.01, max: 50, step: 0.01, value: 5 }
                         ],
                         examples: [ 
                             { name: 'Porcentaje de votos a favor', params: { alpha: 2, beta: 5 }, description: 'Encuesta política: creemos que el candidato tendrá entre 10-40% de votos, con mayor probabilidad hacia valores bajos. Media: 29%.' },
