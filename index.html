@@ -280,8 +280,29 @@
         /* Responsive tweaks */
         @media (max-width: 992px) { .main-content { grid-template-columns: 1fr; } .chart-container { order:0 } }
         @media (max-width: 640px) { .container { padding: 14px; } header h1 { font-size:18px; } .example-button { font-size:13px; } }
-    /* Forzar info panel a ocupar todo el ancho de la grid principal */
-    #info-panel { grid-column: 1 / -1; margin-top: 8px; }
+        
+        /* Forzar info panel a ocupar todo el ancho de la grid principal con transiciones suaves */
+        #info-panel { 
+            grid-column: 1 / -1; 
+            margin-top: 8px; 
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        /* Transición suave cuando el contenido cambia */
+        #info-panel.updating {
+            opacity: 0.7;
+            transform: translateY(-4px);
+        }
+        
+        /* Ajustes responsive para info-panel */
+        @media (max-width: 992px) {
+            #info-panel { margin-top: 18px; }
+        }
+        
+        @media (max-width: 640px) {
+            #info-panel { margin-top: 14px; padding: 14px; }
+        }
     </style>
 </head>
 <body>
@@ -826,37 +847,49 @@
                 });
                 controlsPanel.appendChild(examplesContainer);
 
-                // 2. Update Info Panel
+                // 2. Update Info Panel with smooth transition
                 const example = state.selectedExample[distKey] || dist.examples[0];
-                infoPanel.innerHTML = `
-                    <h2>${dist.info.title}</h2>
-                    <p>${dist.info.description}</p>
-                    ${ (dist.info.formula || dist.info.meanVarFormula || dist.info.concepts || dist.info.terms) ? `<details style="margin:.5rem 1rem;"><summary style="font-weight:bold; cursor:pointer;">Conceptos, fórmulas y términos</summary><div style="margin-top:.5rem;">${dist.info.formula ? `<div class="formula">${dist.info.formula}</div>` : ''}${dist.info.meanVarFormula ? `<div class="formula">${dist.info.meanVarFormula}</div>` : ''}${dist.info.concepts ? dist.info.concepts : ''}${dist.info.terms ? `<hr style="margin:.5rem 0;"><h4 style="margin:.25rem 0;">Términos</h4><ul style="padding-left:1rem; margin:0">${dist.info.terms.map(t => `<li><strong>${t.symbol}</strong>: ${t.description}</li>`).join('')}</ul>` : ''}</div></details>` : '' }
-                    <p>${dist.info.paramExplanation}</p>
-                    <hr style="margin:1rem 0; border:0; border-top:1px solid var(--border-color);">
-                    <h3 style="margin:0 0 .25rem 0">Ejemplo seleccionado</h3>
-                    <p style="margin:.25rem 0 .5rem 0"><strong>${example.name}</strong></p>
-                    <p style="margin:.25rem 0 .5rem 0">${example.description || ''}</p>
-                    <p style="margin:.25rem 0 .5rem 0"><em>Parámetros:</em> ${Object.entries(example.params).map(([k,v]) => `${k}=${typeof v==='number'? (Math.abs(v)>=1000||Math.abs(v)<0.001? v.toExponential(3): v.toString()):v}`).join(', ')}</p>
-                    <p class="foot-note"><strong>Nota:</strong> Ajusta los parámetros para observar cómo cambia la forma de la función.</p>
-                `;
-
-                // Re-render MathJax robusto con reintentos
-                function safeTypeset(retries = 3) {
-                    if (!window.MathJax || !window.MathJax.typesetPromise) {
-                        if (retries > 0) return setTimeout(() => safeTypeset(retries - 1), 200);
-                        return;
-                    }
-                    window.MathJax.typesetClear && window.MathJax.typesetClear([infoPanel]);
-                    window.MathJax.typesetPromise([infoPanel]).then(() => {
-                        // Verificar errores
-                        if (infoPanel.querySelector('.mjx-merror')) {
-                            console.warn('Retry MathJax after error');
-                            if (retries > 0) setTimeout(() => safeTypeset(retries - 1), 300);
+                
+                // Añadir clase de transición
+                infoPanel.classList.add('updating');
+                
+                // Actualizar contenido después de un breve delay para la transición
+                setTimeout(() => {
+                    infoPanel.innerHTML = `
+                        <h2>${dist.info.title}</h2>
+                        <p>${dist.info.description}</p>
+                        ${ (dist.info.formula || dist.info.meanVarFormula || dist.info.concepts || dist.info.terms) ? `<details style="margin:.5rem 1rem;"><summary style="font-weight:bold; cursor:pointer;">Conceptos, fórmulas y términos</summary><div style="margin-top:.5rem;">${dist.info.formula ? `<div class="formula">${dist.info.formula}</div>` : ''}${dist.info.meanVarFormula ? `<div class="formula">${dist.info.meanVarFormula}</div>` : ''}${dist.info.concepts ? dist.info.concepts : ''}${dist.info.terms ? `<hr style="margin:.5rem 0;"><h4 style="margin:.25rem 0;">Términos</h4><ul style="padding-left:1rem; margin:0">${dist.info.terms.map(t => `<li><strong>${t.symbol}</strong>: ${t.description}</li>`).join('')}</ul>` : ''}</div></details>` : '' }
+                        <p>${dist.info.paramExplanation}</p>
+                        <hr style="margin:1rem 0; border:0; border-top:1px solid var(--border-color);">
+                        <h3 style="margin:0 0 .25rem 0">Ejemplo seleccionado</h3>
+                        <p style="margin:.25rem 0 .5rem 0"><strong>${example.name}</strong></p>
+                        <p style="margin:.25rem 0 .5rem 0">${example.description || ''}</p>
+                        <p style="margin:.25rem 0 .5rem 0"><em>Parámetros:</em> ${Object.entries(example.params).map(([k,v]) => `${k}=${typeof v==='number'? (Math.abs(v)>=1000||Math.abs(v)<0.001? v.toExponential(3): v.toString()):v}`).join(', ')}</p>
+                        <p class="foot-note"><strong>Nota:</strong> Ajusta los parámetros para observar cómo cambia la forma de la función.</p>
+                    `;
+                    
+                    // Quitar clase de transición después de actualizar
+                    setTimeout(() => {
+                        infoPanel.classList.remove('updating');
+                        
+                        // Re-render MathJax robusto con reintentos después de la transición
+                        function safeTypeset(retries = 3) {
+                            if (!window.MathJax || !window.MathJax.typesetPromise) {
+                                if (retries > 0) return setTimeout(() => safeTypeset(retries - 1), 200);
+                                return;
+                            }
+                            window.MathJax.typesetClear && window.MathJax.typesetClear([infoPanel]);
+                            window.MathJax.typesetPromise([infoPanel]).then(() => {
+                                // Verificar errores
+                                if (infoPanel.querySelector('.mjx-merror')) {
+                                    console.warn('Retry MathJax after error');
+                                    if (retries > 0) setTimeout(() => safeTypeset(retries - 1), 300);
+                                }
+                            }).catch(err => console.error(err));
                         }
-                    }).catch(err => console.error(err));
-                }
-                safeTypeset();
+                        safeTypeset();
+                    }, 50);
+                }, 150);
 
                 // 3. Add Event Listeners for new controls
                 dist.params.forEach(p => {
